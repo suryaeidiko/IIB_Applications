@@ -1,0 +1,42 @@
+DECLARE externarVar EXTERNAL CHARACTER 'First';
+DECLARE sharedVar SHARED INTEGER 1;
+
+CREATE COMPUTE MODULE All_Variables_Compute
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		CALL CopyMessageHeaders();
+		
+		DECLARE name,city,mobile CHARACTER '';
+		DECLARE refInput REFERENCE TO InputRoot.XMLNSC.Customer;
+		CREATE FIELD OutputRoot.JSON.Data.Customer;
+		
+		DECLARE refOutput REFERENCE TO OutputRoot.JSON.Data.Customer;
+		SET name=refInput.Name;
+		SET city=refInput.City;
+		SET mobile=refInput.Mob;
+
+		SET sharedVar = sharedVar+1;
+		
+		SET refOutput.name1=name;
+		SET refOutput.city1=city;
+		SET refOutput.mobile1=mobile;
+		SET refOutput.extvar_Demo=externarVar;
+		SET refOutput.sharedVar_Demo = sharedVar;
+		-- CALL CopyEntireMessage();
+		RETURN TRUE;
+	END;
+
+	CREATE PROCEDURE CopyMessageHeaders() BEGIN
+--		DECLARE I INTEGER 1;
+--		DECLARE J INTEGER;
+--		SET J = CARDINALITY(InputRoot.*[]);
+--		WHILE I < J DO
+--			SET OutputRoot.*[I] = InputRoot.*[I];
+--			SET I = I + 1;
+--		END WHILE;
+	END;
+
+	CREATE PROCEDURE CopyEntireMessage() BEGIN
+		SET OutputRoot = InputRoot;
+	END;
+END MODULE;
