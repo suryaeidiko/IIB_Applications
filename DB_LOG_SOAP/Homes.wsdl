@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?><wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" name="Homes" targetNamespace="http://www.example.org/Homes/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://www.example.org/Homes/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <wsdl:documentation>
+    <wsdl:appinfo source="WMQI_APPINFO">
+      <MRWSDLAppInfo imported="true">
+        <binding hasEncoding="false" imported="true" name="HomesSOAP" originalBindingStyle="document"/>
+      </MRWSDLAppInfo>
+    </wsdl:appinfo>
+  </wsdl:documentation>
+  
+  <wsdl:types>
+    
+          <xsd:schema targetNamespace="http://www.example.org/Homes/" xmlns:ibmSchExtn="http://www.ibm.com/schema/extensions">
+<xsd:include schemaLocation="Homes_InlineSchema1.xsd"/>
+</xsd:schema>
+    </wsdl:types>
+  <wsdl:message name="SELLRequest">
+    <wsdl:part element="tns:SELL" name="parameters"/>
+  </wsdl:message>
+  <wsdl:message name="SELLResponse">
+    <wsdl:part element="tns:SELLResponse" name="parameters"/>
+  </wsdl:message>
+  <wsdl:message name="ROOMSRequest">
+  	<wsdl:part element="tns:ROOMS" name="parameters"/>
+  </wsdl:message>
+  <wsdl:message name="ROOMSResponse">
+  	<wsdl:part element="tns:ROOMSResponse" name="parameters"/>
+  </wsdl:message>
+  <wsdl:message name="BEDSRequest">
+  	<wsdl:part element="tns:BEDS" name="parameters"/>
+  </wsdl:message>
+  <wsdl:message name="BEDSResponse">
+  	<wsdl:part element="tns:BEDSResponse" name="parameters"/>
+  </wsdl:message>
+  <wsdl:message name="AGERequest">
+  	<wsdl:part element="tns:AGE" name="parameters"/>
+  </wsdl:message>
+  <wsdl:message name="AGEResponse">
+  	<wsdl:part element="tns:AGEResponse" name="parameters"/>
+  </wsdl:message>
+  <wsdl:portType name="Homes">
+    <wsdl:operation name="SELL">
+      <wsdl:input message="tns:SELLRequest"/>
+      <wsdl:output message="tns:SELLResponse"/>
+    </wsdl:operation>
+    <wsdl:operation name="ROOMS">
+    	<wsdl:input message="tns:ROOMSRequest"/>
+    	<wsdl:output message="tns:ROOMSResponse"/>
+    </wsdl:operation>
+    <wsdl:operation name="BEDS">
+    	<wsdl:input message="tns:BEDSRequest"/>
+    	<wsdl:output message="tns:BEDSResponse"/>
+    </wsdl:operation>
+    <wsdl:operation name="AGE">
+    	<wsdl:input message="tns:AGERequest"/>
+    	<wsdl:output message="tns:AGEResponse"/>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="HomesSOAP" type="tns:Homes">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="SELL">
+      <soap:operation soapAction="http://www.example.org/Homes/SELL"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ROOMS">
+      <soap:operation soapAction="http://www.example.org/Homes/ROOMS"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="BEDS">
+      <soap:operation soapAction="http://www.example.org/Homes/BEDS"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AGE">
+      <soap:operation soapAction="http://www.example.org/Homes/AGE"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="Homes">
+    <wsdl:port binding="tns:HomesSOAP" name="HomesSOAP">
+      <soap:address location="http://www.example.org/"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>
