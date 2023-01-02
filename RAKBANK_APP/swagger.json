@@ -1,0 +1,33 @@
+{
+  "swagger" : "2.0",
+  "info" : {
+    "title" : "RAKBANK_APP",
+    "version" : "1.0.0",
+    "description" : "RAKBANK_APP"
+  },
+  "paths" : {
+    "/RAK_LIQUIDATE_TRANSFER" : {
+      "post" : {
+        "operationId" : "postRAK_LIQUIDATE_TRANSFER",
+        "responses" : {
+          "200" : {
+            "description" : "The operation was successful."
+          }
+        },
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "description" : "Insert a RAK_LIQUIDATE_TRANSFER",
+        "parameters" : [ {
+          "name" : "body",
+          "in" : "body",
+          "schema" : {
+            "type" : "string"
+          },
+          "description" : "The request body for the operation",
+          "required" : true
+        } ]
+      }
+    }
+  },
+  "basePath" : "/rakbank_app/v1"
+}

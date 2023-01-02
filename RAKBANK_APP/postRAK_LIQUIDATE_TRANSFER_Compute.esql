@@ -1,0 +1,102 @@
+DECLARE r NAMESPACE 'http://schemas.xmlsoap.org/soap/envelope/';
+DECLARE r1 NAMESPACE 'http://fcubs.ofss.com/service/FCUBSDDService';
+
+CREATE COMPUTE MODULE postRAK_LIQUIDATE_TRANSFER_Compute
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		
+		 CALL CopyEntireMessage();
+		RETURN TRUE;
+	END;
+
+	CREATE PROCEDURE CopyEntireMessage() BEGIN
+	DECLARE creq BLOB ASBITSTREAM(InputRoot.JSON.Data ENCODING 546 CCSID 1208);
+	DECLARE creq1 CHARACTER CAST(creq as CHARACTER CCSID 1208);
+	SET Environment.creq1 = creq1;
+	DECLARE ID CHARACTER;
+	SET ID = CAST(InputLocalEnvironment.Destination.HTTP.RequestIdentifier AS CHARACTER);
+	SET Environment.MSG_ID = ID;
+	
+	
+	DECLARE Service_Name CHARACTER FIELDNAME(InputRoot.JSON.Data.[>]);   -- appName = LIQUIDATETRANSACTION_FSFS_REQ
+	DECLARE querry CHARACTER 'SELECT URL FROM APPLICATIONS WHERE SERVICE_NAME = ?';
+	SET Environment.Result[] = PASSTHRU(querry VALUES(Service_Name));
+	DECLARE APPURL CHARACTER  Environment.Result.URL;
+	IF Service_Name = 'LIQUIDATE_TRANSFER' THEN
+		DECLARE AC_NO REFERENCE TO InputRoot.JSON.Data.Transaction_Details.ACNO;
+		IF AC_NO = '155001856856' THEN
+				
+		SET OutputRoot.SOAP.r:Envelope.(XMLNSC.NamespaceDecl)xmlns:soap = r;
+		SET OutputRoot.SOAP.r:Envelope.r:Body.LIQUIDATE_TRANSFER.(XMLNSC.Attribute)ns1 = r1;
+		DECLARE req REFERENCE TO InputRoot.JSON.Data.LIQUIDATE_TRANSFER;
+		DECLARE req1 REFERENCE TO InputRoot.JSON.Data.Transaction_Details;
+		
+		SET OutputRoot.SOAP.Body.r:Envelope.r:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_HEADER.SOURCE = req.SOURCE;
+		SET OutputRoot.SOAP.Body.r:Envelope.r:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_HEADER.UBSCOMP = req.UBSCOMP;
+		SET OutputRoot.SOAP.Body.r:Envelope.r:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_HEADER.USERID = req.USERID;
+		SET OutputRoot.SOAP.Body.r:Envelope.r:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_HEADER.BRANCH = req.BRANCH;
+		SET OutputRoot.SOAP.Body.r:Envelope.r:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_HEADER.MODULEID = req.MODULEID;
+		SET OutputRoot.SOAP.Body.r:Envelope.r:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_HEADER.SERVICE = req.SERVICE;
+		SET OutputRoot.SOAP.Body.r:Envelope.r:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_HEADER.OPERATION = req.OPERATION;	
+		
+		SET OutputRoot.SOAP.Body.r:Envelope.r:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_BODY.*:Transaction_Details.XREF = req1.XREF;
+		SET OutputRoot.SOAP.Body.r:Envelope.r:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_BODY.*:Transaction_Details.INSTRTYPE = req1.INSTRTYPE;
+		SET OutputRoot.SOAP.Body.r:Envelope.r:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_BODY.*:Transaction_Details.ISSBRN = req1.ISSBRN;
+		SET OutputRoot.SOAP.Body.r:Envelope.r:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_BODY.*:Transaction_Details.INSTRSTAT = req1.INSTRSTAT;
+		SET OutputRoot.SOAP.Body.r:Envelope.r:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_BODY.*:Transaction_Details.PAYBANK = req1.PAYBANK;
+		SET OutputRoot.SOAP.Body.r:Envelope.r:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_BODY.*:Transaction_Details.PAYBRN = req1.PAYBRN;
+		SET OutputRoot.SOAP.Body.r:Envelope.r:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_BODY.*:Transaction_Details.DDMICRNO = req1.DDMICRNO;
+		SET OutputRoot.SOAP.Body.r:Envelope.r:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_BODY.*:Transaction_Details.ACBRN = req1.ACBRN;
+		SET OutputRoot.SOAP.Body.r:Envelope.r:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_BODY.*:Transaction_Details.ACNO = req1.ACNO;
+		SET OutputRoot.SOAP.Body.r:Envelope.r:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_BODY.*:Transaction_Details.INSTRNO = req1.INSTRNO;
+		SET OutputRoot.SOAP.Body.r:Envelope.r:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_BODY.*:Transaction_Details.INSTRAMT = req1.INSTRAMT;
+		SET OutputRoot.SOAP.Body.r:Envelope.r:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_BODY.*:Transaction_Details.NARRATIVE = req1.NARRATIVE;
+		
+		DECLARE hreq BLOB ASBITSTREAM(OutputRoot.SOAP.Body ENCODING 546 CCSID 1208);
+		DECLARE hreq1 CHARACTER CAST(hreq AS CHARACTER CCSID 1208);
+		SET Environment.hreq1 = hreq1;
+	
+		SET OutputLocalEnvironment.Destination.SOAP.Request.Transport.HTTP.WebServiceURL = APPURL;
+			
+		ELSE
+			
+		SET OutputRoot.SOAP.r:Envelope.(XMLNSC.NamespaceDecl)xmlns:soap = r;
+		SET OutputRoot.SOAP.r:Envelope.r:Body.LIQUIDATE_TRANSFER.(XMLNSC.Attribute)ns1 = r1;
+		DECLARE req REFERENCE TO InputRoot.JSON.Data.LIQUIDATE_TRANSFER;
+		DECLARE req1 REFERENCE TO InputRoot.JSON.Data.Transaction_Details;
+		
+		SET OutputRoot.SOAP.Body.r:Envelope.r:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_HEADER.SOURCE = req.SOURCE;
+		SET OutputRoot.SOAP.Body.r:Envelope.r:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_HEADER.UBSCOMP = req.UBSCOMP;
+		SET OutputRoot.SOAP.Body.r:Envelope.r:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_HEADER.USERID = req.USERID;
+		SET OutputRoot.SOAP.Body.r:Envelope.r:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_HEADER.BRANCH = req.BRANCH;
+		SET OutputRoot.SOAP.Body.r:Envelope.r:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_HEADER.MODULEID = req.MODULEID;
+		SET OutputRoot.SOAP.Body.r:Envelope.r:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_HEADER.SERVICE = req.SERVICE;
+		SET OutputRoot.SOAP.Body.r:Envelope.r:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_HEADER.OPERATION = req.OPERATION;	
+		
+		SET OutputRoot.SOAP.Body.r:Envelope.r:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_BODY.*:Transaction_Details.XREF = req1.XREF;
+		SET OutputRoot.SOAP.Body.r:Envelope.r:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_BODY.*:Transaction_Details.INSTRTYPE = req1.INSTRTYPE;
+		SET OutputRoot.SOAP.Body.r:Envelope.r:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_BODY.*:Transaction_Details.ISSBRN = req1.ISSBRN;
+		SET OutputRoot.SOAP.Body.r:Envelope.r:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_BODY.*:Transaction_Details.INSTRSTAT = req1.INSTRSTAT;
+		SET OutputRoot.SOAP.Body.r:Envelope.r:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_BODY.*:Transaction_Details.PAYBANK = req1.PAYBANK;
+		SET OutputRoot.SOAP.Body.r:Envelope.r:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_BODY.*:Transaction_Details.PAYBRN = req1.PAYBRN;
+		SET OutputRoot.SOAP.Body.r:Envelope.r:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_BODY.*:Transaction_Details.DDMICRNO = req1.DDMICRNO;
+		SET OutputRoot.SOAP.Body.r:Envelope.r:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_BODY.*:Transaction_Details.ACBRN = req1.ACBRN;
+		SET OutputRoot.SOAP.Body.r:Envelope.r:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_BODY.*:Transaction_Details.ACNO = req1.ACNO;
+		SET OutputRoot.SOAP.Body.r:Envelope.r:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_BODY.*:Transaction_Details.INSTRNO = req1.INSTRNO;
+		SET OutputRoot.SOAP.Body.r:Envelope.r:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_BODY.*:Transaction_Details.INSTRAMT = req1.INSTRAMT;
+		SET OutputRoot.SOAP.Body.r:Envelope.r:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_BODY.*:Transaction_Details.NARRATIVE = req1.NARRATIVE;
+		
+		DECLARE hreq BLOB ASBITSTREAM(OutputRoot.SOAP.Body ENCODING 546 CCSID 1208);
+		DECLARE hreq1 CHARACTER CAST(hreq AS CHARACTER CCSID 1208);
+		SET Environment.hreq1 = hreq1;
+		
+		SET OutputLocalEnvironment.Destination.SOAP.Request.Transport.HTTP.WebServiceURL = 'http://localhost:7800/FailureCase';
+		
+		END IF;
+				
+	ELSE
+		SET OutputRoot.JSON.Data.EXCEPTION = 'authorization Failed';
+		SET OutputRoot.JSON.Data.ERROR_Code = '-1';
+	END IF;	
+	END;
+END MODULE;

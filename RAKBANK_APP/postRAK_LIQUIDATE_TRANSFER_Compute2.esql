@@ -1,0 +1,15 @@
+
+
+CREATE COMPUTE MODULE postRAK_LIQUIDATE_TRANSFER_Compute2
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		
+		 CALL CopyEntireMessage();
+		RETURN TRUE;
+	END;
+
+	CREATE PROCEDURE CopyEntireMessage() BEGIN
+		
+		SET OutputRoot = InputRoot;
+	END;
+END MODULE;
