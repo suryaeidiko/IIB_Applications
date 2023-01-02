@@ -1,0 +1,49 @@
+
+
+CREATE COMPUTE MODULE RAKBANK_FAILURE_MF_Compute
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		
+		 CALL CopyEntireMessage();
+		RETURN TRUE;
+	END;
+
+	CREATE PROCEDURE CopyEntireMessage() BEGIN
+		
+		SET OutputRoot.SOAP.S:Envelope.(XMLNSC.NamespaceDecl)xmlns:S = S;
+		SET OutputRoot.SOAP.S:Envelope.S:Body.LIQUIDATE_TRANSFER.(XMLNSC.Attribute)xmlns = ns1;
+		DECLARE ref REFERENCE TO InputRoot.SOAP.Body.*:Envelope.*:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_HEADER;
+		DECLARE inref REFERENCE TO InputRoot.SOAP.Body.*:Envelope.*:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_BODY.*:Transaction_Details;
+		
+		SET OutputRoot.SOAP.Body.S:Envelope.S:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_HEADER.SOURCE = 'FLEXCUBE';
+		SET OutputRoot.SOAP.Body.S:Envelope.S:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_HEADER.UBSCOMP = ref.UBSCOMP;
+		SET OutputRoot.SOAP.Body.S:Envelope.S:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_HEADER.MSGID = '9121077067135440';
+		SET OutputRoot.SOAP.Body.S:Envelope.S:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_HEADER.USERID = ref.USERID;
+		SET OutputRoot.SOAP.Body.S:Envelope.S:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_HEADER.BRANCH = ref.BRANCH;
+		SET OutputRoot.SOAP.Body.S:Envelope.S:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_HEADER.MODULEID = ref.MODULEID;
+		SET OutputRoot.SOAP.Body.S:Envelope.S:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_HEADER.SERVICE = ref.SERVICE;
+		SET OutputRoot.SOAP.Body.S:Envelope.S:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_HEADER.OPERATION = ref.OPERATION;
+		SET OutputRoot.SOAP.Body.S:Envelope.S:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_HEADER.SOURCE_OPERATION = 'SOURCE_OPERATION';
+		SET OutputRoot.SOAP.Body.S:Envelope.S:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_HEADER.DESTINATION = 'CTR';
+		SET OutputRoot.SOAP.Body.S:Envelope.S:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_HEADER.MULTITRIPID = '6210770750634714';
+		SET OutputRoot.SOAP.Body.S:Envelope.S:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_HEADER.FUNCTIONID = 'DDGONLIQ';
+		SET OutputRoot.SOAP.Body.S:Envelope.S:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_HEADER.ACTION = 'LIQUIDATE';
+		SET OutputRoot.SOAP.Body.S:Envelope.S:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_HEADER.MSGSTAT = 'FAILURE';
+		
+		SET OutputRoot.SOAP.Body.S:Envelope.S:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_BODY.Transaction_Details.XREF = inref.XREF;
+		SET OutputRoot.SOAP.Body.S:Envelope.S:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_BODY.Transaction_Details.INSTRTYPE = inref.INSTRTYPE;
+		SET OutputRoot.SOAP.Body.S:Envelope.S:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_BODY.Transaction_Details.ISSBRN = inref.ISSBRN;
+		SET OutputRoot.SOAP.Body.S:Envelope.S:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_BODY.Transaction_Details.INSTRSTAT = inref.INSTRSTAT;
+		SET OutputRoot.SOAP.Body.S:Envelope.S:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_BODY.Transaction_Details.PAYBANK = inref.PAYBANK;
+		SET OutputRoot.SOAP.Body.S:Envelope.S:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_BODY.Transaction_Details.PAYBRN = inref.PAYBRN;
+		SET OutputRoot.SOAP.Body.S:Envelope.S:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_BODY.Transaction_Details.DDMICRNO = inref.DDMICRNO;
+		SET OutputRoot.SOAP.Body.S:Envelope.S:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_BODY.Transaction_Details.ACBRN = inref.ACBRN;
+		SET OutputRoot.SOAP.Body.S:Envelope.S:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_BODY.Transaction_Details.ACNO = inref.ACNO;
+		SET OutputRoot.SOAP.Body.S:Envelope.S:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_BODY.Transaction_Details.INSTRNO = inref.INSTRNO;
+		SET OutputRoot.SOAP.Body.S:Envelope.S:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_BODY.Transaction_Details.INSTRAMT = inref.INSTRAMT;
+		SET OutputRoot.SOAP.Body.S:Envelope.S:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_BODY.Transaction_Details.NARRATIVE = inref.NARRATIVE;
+		SET OutputRoot.SOAP.Body.S:Envelope.S:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_BODY.FCUBS_ERROR_RESP.ERROR.ECODE = 'DD-UPLOTH';
+		SET OutputRoot.SOAP.Body.S:Envelope.S:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_BODY.FCUBS_ERROR_RESP.ERROR.EDESC = 'Unhandled Exception';
+		
+	END;
+END MODULE;

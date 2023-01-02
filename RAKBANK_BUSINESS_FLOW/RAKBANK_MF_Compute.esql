@@ -1,0 +1,141 @@
+
+DECLARE S NAMESPACE 'http://schemas.xmlsoap.org/soap/envelope/';
+	DECLARE ns1 NAMESPACE 'http://fcubs.ofss.com/service/FCUBSDDService';
+	DECLARE A EXTERNAL CHARACTER 'ETB';
+	DECLARE B EXTERNAL CHARACTER '23799.26';
+
+	CREATE COMPUTE MODULE RAKBANK_MF_Compute
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		
+		 CALL CopyEntireMessage();
+		RETURN TRUE;
+	END;
+
+	CREATE PROCEDURE CopyEntireMessage() BEGIN
+		
+		SET OutputRoot.SOAP.S:Envelope.(XMLNSC.NamespaceDecl)xmlns:S = S;
+		SET OutputRoot.SOAP.S:Envelope.S:Body.LIQUIDATE_TRANSFER.(XMLNSC.Attribute)xmlns = ns1;
+		DECLARE ref REFERENCE TO InputRoot.SOAP.Body.*:Envelope.*:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_HEADER;
+		DECLARE inref REFERENCE TO InputRoot.SOAP.Body.*:Envelope.*:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_BODY.*:Transaction_Details;
+		
+		SET OutputRoot.SOAP.Body.S:Envelope.S:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_HEADER.SOURCE = 'FLEXCUBE';
+		SET OutputRoot.SOAP.Body.S:Envelope.S:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_HEADER.UBSCOMP = ref.UBSCOMP;
+		SET OutputRoot.SOAP.Body.S:Envelope.S:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_HEADER.MSGID = '9121077067135440';
+		SET OutputRoot.SOAP.Body.S:Envelope.S:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_HEADER.USERID = ref.USERID;
+		SET OutputRoot.SOAP.Body.S:Envelope.S:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_HEADER.BRANCH = ref.BRANCH;
+		SET OutputRoot.SOAP.Body.S:Envelope.S:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_HEADER.MODULEID = ref.MODULEID;
+		SET OutputRoot.SOAP.Body.S:Envelope.S:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_HEADER.SERVICE = ref.SERVICE;
+		SET OutputRoot.SOAP.Body.S:Envelope.S:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_HEADER.OPERATION = ref.OPERATION;
+		SET OutputRoot.SOAP.Body.S:Envelope.S:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_HEADER.SOURCE_OPERATION = 'SOURCE_OPERATION';
+		SET OutputRoot.SOAP.Body.S:Envelope.S:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_HEADER.DESTINATION = 'CTR';
+		SET OutputRoot.SOAP.Body.S:Envelope.S:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_HEADER.MULTITRIPID = '6210770750634714';
+		SET OutputRoot.SOAP.Body.S:Envelope.S:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_HEADER.FUNCTIONID = 'DDGONLIQ';
+		SET OutputRoot.SOAP.Body.S:Envelope.S:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_HEADER.ACTION = 'LIQUIDATE';
+		SET OutputRoot.SOAP.Body.S:Envelope.S:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_HEADER.MSGSTAT = 'SUCCESS';
+		
+		SET OutputRoot.SOAP.Body.S:Envelope.S:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_BODY.Transaction_Details.XREF = inref.XREF;
+		SET OutputRoot.SOAP.Body.S:Envelope.S:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_BODY.Transaction_Details.PRODUCTCODE = 'BCLA';
+		SET OutputRoot.SOAP.Body.S:Envelope.S:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_BODY.Transaction_Details.FCCREF = '155BCSA210120002';
+		SET OutputRoot.SOAP.Body.S:Envelope.S:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_BODY.Transaction_Details.VERNO = '2';
+		SET OutputRoot.SOAP.Body.S:Envelope.S:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_BODY.Transaction_Details.ESN = '2';
+		SET OutputRoot.SOAP.Body.S:Envelope.S:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_BODY.Transaction_Details.INSTRTYPE = inref.INSTRTYPE;
+		SET OutputRoot.SOAP.Body.S:Envelope.S:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_BODY.Transaction_Details.ISSBRN = inref.ISSBRN;
+		SET OutputRoot.SOAP.Body.S:Envelope.S:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_BODY.Transaction_Details.INSTRSTAT = inref.INSTRSTAT;
+		SET OutputRoot.SOAP.Body.S:Envelope.S:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_BODY.Transaction_Details.PAYBANK = inref.PAYBANK;
+		SET OutputRoot.SOAP.Body.S:Envelope.S:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_BODY.Transaction_Details.EXPDT = '2022-01-12';
+		SET OutputRoot.SOAP.Body.S:Envelope.S:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_BODY.Transaction_Details.RELCUST = '155001856';
+		SET OutputRoot.SOAP.Body.S:Envelope.S:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_BODY.Transaction_Details.ACBRN = inref.ACBRN;
+		SET OutputRoot.SOAP.Body.S:Envelope.S:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_BODY.Transaction_Details.ACNO = inref.ACNO;
+		SET OutputRoot.SOAP.Body.S:Envelope.S:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_BODY.Transaction_Details.BENFNM = 'ETHIO TELECOM LEGEHAR OFFICE';
+		SET OutputRoot.SOAP.Body.S:Envelope.S:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_BODY.Transaction_Details.INSTRNO = inref.INSTRNO;
+		SET OutputRoot.SOAP.Body.S:Envelope.S:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_BODY.Transaction_Details.INSTRDATE = '2021-01-12';
+		SET OutputRoot.SOAP.Body.S:Envelope.S:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_BODY.Transaction_Details.INSTRCCY = A;
+		SET OutputRoot.SOAP.Body.S:Envelope.S:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_BODY.Transaction_Details.INSTRAMT = inref.INSTRAMT;
+		SET OutputRoot.SOAP.Body.S:Envelope.S:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_BODY.Transaction_Details.EXCHRATE = '1';
+		SET OutputRoot.SOAP.Body.S:Envelope.S:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_BODY.Transaction_Details.ACCCY = A;
+		SET OutputRoot.SOAP.Body.S:Envelope.S:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_BODY.Transaction_Details.OFSCCY = A;
+		SET OutputRoot.SOAP.Body.S:Envelope.S:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_BODY.Transaction_Details.OFSAMT = B;
+		SET OutputRoot.SOAP.Body.S:Envelope.S:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_BODY.Transaction_Details.NARRATIVE = inref.NARRATIVE;
+		SET OutputRoot.SOAP.Body.S:Envelope.S:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_BODY.Transaction_Details.MAKERID = 'CTSUSER';
+		SET OutputRoot.SOAP.Body.S:Envelope.S:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_BODY.Transaction_Details.MAKERSTAMP = '2021-01-14';
+		SET OutputRoot.SOAP.Body.S:Envelope.S:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_BODY.Transaction_Details.CHECKERID = 'CTSUSER';
+		SET OutputRoot.SOAP.Body.S:Envelope.S:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_BODY.Transaction_Details.CHECKERSTAMP = '2021-01-14';
+		SET OutputRoot.SOAP.Body.S:Envelope.S:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_BODY.Transaction_Details.CONTSTAT = 'O';
+		SET OutputRoot.SOAP.Body.S:Envelope.S:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_BODY.Transaction_Details.AUTHSTAT = 'A';
+		SET OutputRoot.SOAP.Body.S:Envelope.S:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_BODY.Transaction_Details.MODNO = '2';
+		SET OutputRoot.SOAP.Body.S:Envelope.S:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_BODY.Transaction_Details.ONCEAUTH = 'Y';
+		SET OutputRoot.SOAP.Body.S:Envelope.S:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_BODY.Transaction_Details.TCYTOTCHGAMT = '0';
+		SET OutputRoot.SOAP.Body.S:Envelope.S:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_BODY.Transaction_Details.ACCTITLE = 'SELAMAWI BEYENE TEFERI(BMORE APARTEMENT HOTEL)';
+		SET OutputRoot.SOAP.Body.S:Envelope.S:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_BODY.Transaction_Details.ACTAMT = B;
+		SET OutputRoot.SOAP.Body.S:Envelope.S:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_BODY.Transaction_Details.TXNDATE = '2021-01-14';
+		SET OutputRoot.SOAP.Body.S:Envelope.S:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_BODY.Transaction_Details.ACYAMOUNT = B;
+		SET OutputRoot.SOAP.Body.S:Envelope.S:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_BODY.Transaction_Details.OFSACC = '246010008';
+		SET OutputRoot.SOAP.Body.S:Envelope.S:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_BODY.Transaction_Details.MULCHGCY = A;
+		SET OutputRoot.SOAP.Body.S:Envelope.S:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_BODY.Transaction_Details.OFSBRANCH = '155';
+		SET OutputRoot.SOAP.Body.S:Envelope.S:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_BODY.Transaction_Details.DELIVERY_MODE = 'D';
+		SET OutputRoot.SOAP.Body.S:Envelope.S:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_BODY.Transaction_Details.Cheque_Details.PAYBRN = '155';
+		SET OutputRoot.SOAP.Body.S:Envelope.S:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_BODY.Transaction_Details.Cheque_Details.STAT = 'LIQD';
+		SET OutputRoot.SOAP.Body.S:Envelope.S:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_BODY.Transaction_Details.Cheque_Details.BENFNAME = 'ETHIO TELECOM LEGEHAR OFFICE';
+		SET OutputRoot.SOAP.Body.S:Envelope.S:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_BODY.Transaction_Details.Mis_Details.BRANCH = '155';
+		SET OutputRoot.SOAP.Body.S:Envelope.S:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_BODY.Transaction_Details.Mis_Details.RTFLAG = 'P';
+		SET OutputRoot.SOAP.Body.S:Envelope.S:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_BODY.Transaction_Details.Mis_Details.FUNDMIS1LBL1 = 'FUNDID';
+		SET OutputRoot.SOAP.Body.S:Envelope.S:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_BODY.Transaction_Details.Mis_Details.COMPMIS3LBL3 = 'CUST_SEG';
+		SET OutputRoot.SOAP.Body.S:Envelope.S:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_BODY.Transaction_Details.Mis_Details.TXNMIS1LBL1 = 'COST_CTR';
+		SET OutputRoot.SOAP.Body.S:Envelope.S:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_BODY.Transaction_Details.Mis_Details.TXNMIS2LBL2 = 'ACCT-OFF';
+		SET OutputRoot.SOAP.Body.S:Envelope.S:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_BODY.Transaction_Details.Udf_Details[1].FIELD_NAME = 'BENIFICIARY_NAME';
+		SET OutputRoot.SOAP.Body.S:Envelope.S:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_BODY.Transaction_Details.Udf_Details[1].VAL_TYPE = 'N';
+		SET OutputRoot.SOAP.Body.S:Envelope.S:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_BODY.Transaction_Details.Udf_Details[2].FIELD_NAME = 'CUSTOMER_ID';
+		SET OutputRoot.SOAP.Body.S:Envelope.S:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_BODY.Transaction_Details.Udf_Details[2].VAL_TYPE = 'N';
+		SET OutputRoot.SOAP.Body.S:Envelope.S:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_BODY.Transaction_Details.Udf_Details[3].FIELD_NAME = 'ID_TYPE';
+		SET OutputRoot.SOAP.Body.S:Envelope.S:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_BODY.Transaction_Details.Udf_Details[3].VAL_TYPE = 'V';
+		SET OutputRoot.SOAP.Body.S:Envelope.S:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_BODY.Transaction_Details.Udf_Details[4].FIELD_NAME = 'ID_ISSUED_BY';
+		SET OutputRoot.SOAP.Body.S:Envelope.S:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_BODY.Transaction_Details.Udf_Details[4].VAL_TYPE = 'N';
+		SET OutputRoot.SOAP.Body.S:Envelope.S:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_BODY.Transaction_Details.Udf_Details[5].FIELD_NAME = 'FIRST_NAME';
+		SET OutputRoot.SOAP.Body.S:Envelope.S:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_BODY.Transaction_Details.Udf_Details[5].VAL_TYPE = 'N';
+		SET OutputRoot.SOAP.Body.S:Envelope.S:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_BODY.Transaction_Details.Udf_Details[6].FIELD_NAME = 'MIDDLE_NAME';
+		SET OutputRoot.SOAP.Body.S:Envelope.S:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_BODY.Transaction_Details.Udf_Details[6].VAL_TYPE = 'N';
+		SET OutputRoot.SOAP.Body.S:Envelope.S:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_BODY.Transaction_Details.Udf_Details[7].FIELD_NAME = 'LAST_NAME';
+		SET OutputRoot.SOAP.Body.S:Envelope.S:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_BODY.Transaction_Details.Udf_Details[7].VAL_TYPE = 'N';
+		SET OutputRoot.SOAP.Body.S:Envelope.S:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_BODY.Transaction_Details.Udf_Details[8].FIELD_NAME = 'GENDER';
+		SET OutputRoot.SOAP.Body.S:Envelope.S:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_BODY.Transaction_Details.Udf_Details[8].VAL_TYPE = 'V';
+		SET OutputRoot.SOAP.Body.S:Envelope.S:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_BODY.Transaction_Details.Udf_Details[9].FIELD_NAME = 'TELEPHONE';
+		SET OutputRoot.SOAP.Body.S:Envelope.S:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_BODY.Transaction_Details.Udf_Details[9].VAL_TYPE = 'N';
+		SET OutputRoot.SOAP.Body.S:Envelope.S:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_BODY.Transaction_Details.Udf_Details[10].FIELD_NAME = 'CITY';
+		SET OutputRoot.SOAP.Body.S:Envelope.S:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_BODY.Transaction_Details.Udf_Details[10].VAL_TYPE = 'N';
+		SET OutputRoot.SOAP.Body.S:Envelope.S:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_BODY.Transaction_Details.Udf_Details[11].FIELD_NAME = 'SUB_CITY';
+		SET OutputRoot.SOAP.Body.S:Envelope.S:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_BODY.Transaction_Details.Udf_Details[11].VAL_TYPE = 'N';
+		SET OutputRoot.SOAP.Body.S:Envelope.S:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_BODY.Transaction_Details.Udf_Details[12].FIELD_NAME = 'WEREDA';
+		SET OutputRoot.SOAP.Body.S:Envelope.S:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_BODY.Transaction_Details.Udf_Details[12].VAL_TYPE = 'N';
+		SET OutputRoot.SOAP.Body.S:Envelope.S:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_BODY.Transaction_Details.Udf_Details[13].FIELD_NAME = 'HOUSE_NO';
+		SET OutputRoot.SOAP.Body.S:Envelope.S:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_BODY.Transaction_Details.Udf_Details[13].VAL_TYPE = 'N';
+		SET OutputRoot.SOAP.Body.S:Envelope.S:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_BODY.Transaction_Details.Udf_Details[14].FIELD_NAME = 'POSTAL_CODE';
+		SET OutputRoot.SOAP.Body.S:Envelope.S:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_BODY.Transaction_Details.Udf_Details[14].VAL_TYPE = 'N';
+		SET OutputRoot.SOAP.Body.S:Envelope.S:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_BODY.Transaction_Details.Udf_Details[15].FIELD_NAME = 'BUSSINESS_TEL_NO';
+		SET OutputRoot.SOAP.Body.S:Envelope.S:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_BODY.Transaction_Details.Udf_Details[15].VAL_TYPE = 'N';
+		SET OutputRoot.SOAP.Body.S:Envelope.S:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_BODY.Transaction_Details.Udf_Details[16].FIELD_NAME = 'BUSINESS_FAX_NO';
+		SET OutputRoot.SOAP.Body.S:Envelope.S:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_BODY.Transaction_Details.Udf_Details[16].VAL_TYPE = 'N';
+		SET OutputRoot.SOAP.Body.S:Envelope.S:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_BODY.Transaction_Details.Udf_Details[17].FIELD_NAME = 'RESIDENCE_TEL_NO';
+		SET OutputRoot.SOAP.Body.S:Envelope.S:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_BODY.Transaction_Details.Udf_Details[17].VAL_TYPE = 'N';
+		SET OutputRoot.SOAP.Body.S:Envelope.S:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_BODY.Transaction_Details.Udf_Details[18].FIELD_NAME = 'EMAIL_ADDRESS';
+		SET OutputRoot.SOAP.Body.S:Envelope.S:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_BODY.Transaction_Details.Udf_Details[18].VAL_TYPE = 'N';
+		SET OutputRoot.SOAP.Body.S:Envelope.S:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_BODY.Transaction_Details.Udf_Details[19].FIELD_NAME = 'PASSPORT_NO';
+		SET OutputRoot.SOAP.Body.S:Envelope.S:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_BODY.Transaction_Details.Udf_Details[19].VAL_TYPE = 'N';
+		SET OutputRoot.SOAP.Body.S:Envelope.S:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_BODY.Transaction_Details.Udf_Details[20].FIELD_NAME = 'PASSPORT_ISSUEDBY';
+		SET OutputRoot.SOAP.Body.S:Envelope.S:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_BODY.Transaction_Details.Udf_Details[20].VAL_TYPE = 'N';
+		SET OutputRoot.SOAP.Body.S:Envelope.S:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_BODY.Transaction_Details.Udf_Details[21].FIELD_NAME = 'RESIDENCE_COUNTRY';
+		SET OutputRoot.SOAP.Body.S:Envelope.S:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_BODY.Transaction_Details.Udf_Details[21].VAL_TYPE = 'N';
+		SET OutputRoot.SOAP.Body.S:Envelope.S:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_BODY.Transaction_Details.Udf_Details[22].FIELD_NAME = 'ORIGINAL_COUNTYR';
+		SET OutputRoot.SOAP.Body.S:Envelope.S:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_BODY.Transaction_Details.Udf_Details[22].VAL_TYPE = 'N';
+		SET OutputRoot.SOAP.Body.S:Envelope.S:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_BODY.Transaction_Details.Udf_Details[23].FIELD_NAME = 'OCCUPATION';
+		SET OutputRoot.SOAP.Body.S:Envelope.S:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_BODY.Transaction_Details.Udf_Details[23].VAL_TYPE = 'N';
+		SET OutputRoot.SOAP.Body.S:Envelope.S:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_BODY.Transaction_Details.Udf_Details[24].FIELD_NAME = 'COUNTRY';
+		SET OutputRoot.SOAP.Body.S:Envelope.S:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_BODY.Transaction_Details.Udf_Details[24].VAL_TYPE = 'N';
+		SET OutputRoot.SOAP.Body.S:Envelope.S:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_BODY.Transaction_Details.Udf_Details[25].FIELD_NAME = 'REGION';
+		SET OutputRoot.SOAP.Body.S:Envelope.S:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_BODY.Transaction_Details.Udf_Details[25].VAL_TYPE = 'N';
+		SET OutputRoot.SOAP.Body.S:Envelope.S:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_BODY.FCUBS_WARNING_RESP.WARNING.WCODE = 'GW-SAV-01';
+		SET OutputRoot.SOAP.Body.S:Envelope.S:Body.*:LIQUIDATE_TRANSFER.*:FCUBS_BODY.FCUBS_WARNING_RESP.WARNING.WDESC = 'Transaction Saved Successfully';
+	
+		
+	END;
+END MODULE;
