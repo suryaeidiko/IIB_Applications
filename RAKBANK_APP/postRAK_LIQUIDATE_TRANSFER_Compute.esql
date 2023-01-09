@@ -10,9 +10,11 @@ CREATE COMPUTE MODULE postRAK_LIQUIDATE_TRANSFER_Compute
 	END;
 
 	CREATE PROCEDURE CopyEntireMessage() BEGIN
+		
 	DECLARE creq BLOB ASBITSTREAM(InputRoot.JSON.Data ENCODING 546 CCSID 1208);
 	DECLARE creq1 CHARACTER CAST(creq as CHARACTER CCSID 1208);
 	SET Environment.creq1 = creq1;
+	
 	DECLARE ID CHARACTER;
 	SET ID = CAST(InputLocalEnvironment.Destination.HTTP.RequestIdentifier AS CHARACTER);
 	SET Environment.MSG_ID = ID;
@@ -21,9 +23,10 @@ CREATE COMPUTE MODULE postRAK_LIQUIDATE_TRANSFER_Compute
 	DECLARE Service_Name CHARACTER FIELDNAME(InputRoot.JSON.Data.[>]);   -- appName = LIQUIDATETRANSACTION_FSFS_REQ
 	DECLARE querry CHARACTER 'SELECT URL FROM APPLICATIONS WHERE SERVICE_NAME = ?';
 	SET Environment.Result[] = PASSTHRU(querry VALUES(Service_Name));
-	DECLARE APPURL CHARACTER  Environment.Result.URL;
+	DECLARE AURL CHARACTER  Environment.Result.URL;
 	IF Service_Name = 'LIQUIDATE_TRANSFER' THEN
-		DECLARE AC_NO REFERENCE TO InputRoot.JSON.Data.Transaction_Details.ACNO;
+		DECLARE AC_NO INTEGER;
+		SET AC_NO = InputRoot.JSON.Data.Transaction_Details.ACNO;
 		IF AC_NO = '155001856856' THEN
 				
 		SET OutputRoot.SOAP.r:Envelope.(XMLNSC.NamespaceDecl)xmlns:soap = r;
@@ -56,7 +59,7 @@ CREATE COMPUTE MODULE postRAK_LIQUIDATE_TRANSFER_Compute
 		DECLARE hreq1 CHARACTER CAST(hreq AS CHARACTER CCSID 1208);
 		SET Environment.hreq1 = hreq1;
 	
-		SET OutputLocalEnvironment.Destination.SOAP.Request.Transport.HTTP.WebServiceURL = APPURL;
+		SET OutputLocalEnvironment.Destination.SOAP.Request.Transport.HTTP.WebServiceURL = AURL;
 			
 		ELSE
 			
@@ -90,7 +93,7 @@ CREATE COMPUTE MODULE postRAK_LIQUIDATE_TRANSFER_Compute
 		DECLARE hreq1 CHARACTER CAST(hreq AS CHARACTER CCSID 1208);
 		SET Environment.hreq1 = hreq1;
 		
-		SET OutputLocalEnvironment.Destination.SOAP.Request.Transport.HTTP.WebServiceURL = 'http://localhost:7800/FailureCase';
+		SET OutputLocalEnvironment.Destination.SOAP.Request.Transport.HTTP.WebServiceURL = 'http://localhost:7801/Failure';
 		
 		END IF;
 				

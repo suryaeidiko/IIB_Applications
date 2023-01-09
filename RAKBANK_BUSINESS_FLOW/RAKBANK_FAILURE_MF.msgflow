@@ -6,7 +6,7 @@
     <colorGraphic16 xmi:type="utility:GIFFileGraphic" resourceName="platform:/plugin/RAKBANK_BUSINESS_FLOW/icons/full/obj16/RAKBANK_FAILURE_MF.gif"/>
     <colorGraphic32 xmi:type="utility:GIFFileGraphic" resourceName="platform:/plugin/RAKBANK_BUSINESS_FLOW/icons/full/obj30/RAKBANK_FAILURE_MF.gif"/>
     <composition>
-      <nodes xmi:type="ComIbmSOAPInput.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_1" location="137,83" wsdlOperationMode="gateway" useHTTPTransport="true" urlSelector="/FailureCase" parserXmlnscBuildTreeUsingXMLSchema="false" validateMaster="none">
+      <nodes xmi:type="ComIbmSOAPInput.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_1" location="137,83" wsdlOperationMode="gateway" useHTTPTransport="true" urlSelector="/Failure" parserXmlnscBuildTreeUsingXMLSchema="false" validateMaster="none">
         <translation xmi:type="utility:ConstantString" string="SOAP Input"/>
       </nodes>
       <nodes xmi:type="ComIbmSOAPReply.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_2" location="583,80">
