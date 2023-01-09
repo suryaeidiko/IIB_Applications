@@ -1,0 +1,37 @@
+
+
+CREATE COMPUTE MODULE MF_Encry_Decry_Compute
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		
+		 CALL CopyEntireMessage();
+		RETURN TRUE;
+	END;
+
+	CREATE PROCEDURE CopyEntireMessage() BEGIN
+		
+	
+	 DECLARE key CHARACTER '1s2sfd5duks56uf2';
+			 
+	DECLARE enChar CHARACTER CAST(ASBITSTREAM(InputRoot.XMLNSC CCSID InputRoot.Properties.CodedCharSetId ENCODING InputRoot.Properties.Encoding) AS CHARACTER CCSID InputRoot.Properties.CodedCharSetId);
+
+	SET Environment.encryptData = Encryption(enChar, key);
+	
+	SET Environment.Decryptdata = Decryption(Environment.encryptData,key);
+		
+	 SET OutputRoot.XMLNSC.DATA.Encrypt= Environment.encryptData;
+	 SET OutputRoot.XMLNSC.DATA.Decrypt=Environment.Decryptdata;
+	
+	END;
+END MODULE;
+
+CREATE PROCEDURE Encryption (IN StringToEncrypt CHARACTER,IN passwd CHARACTER )
+RETURNS CHARACTER
+LANGUAGE JAVA
+EXTERNAL NAME "com.java.EncryptionDecryption.EncryptionDecryption.Encryption";
+
+
+CREATE PROCEDURE Decryption (IN StringToDecrypt CHARACTER,IN passwd CHARACTER )
+RETURNS CHARACTER
+LANGUAGE JAVA
+EXTERNAL NAME "com.java.EncryptionDecryption.EncryptionDecryption.Decryption";
