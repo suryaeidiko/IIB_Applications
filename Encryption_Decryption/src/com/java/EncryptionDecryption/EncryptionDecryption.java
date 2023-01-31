@@ -8,8 +8,8 @@ import java.util.Base64;
 
 import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
-
 public class EncryptionDecryption {
+
 	private static SecretKeySpec secretkey;
 	private static byte [] Key;
 	
@@ -29,7 +29,8 @@ public static void setkey(String MyKey) {
 	try {
 		Key = MyKey.getBytes("UTF-8");
 		MessageDigest sha = MessageDigest.getInstance("SHA-1");
-		Key = sha.digest(Key);
+		Key = sha.digest(Key)
+;
 		Key = Arrays.copyOf(Key, 16);
 		secretkey = new SecretKeySpec(Key, "AES");
 				
@@ -70,5 +71,4 @@ public static String Decryption(String StringToDecrypt, String passwd) {
 	}
 	return null;
 }
-
 }

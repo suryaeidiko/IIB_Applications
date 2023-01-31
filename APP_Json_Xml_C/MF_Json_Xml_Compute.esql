@@ -1,0 +1,80 @@
+
+
+CREATE COMPUTE MODULE MF_Json_Xml_Compute
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+
+		CALL CopyEntireMessage();
+		RETURN TRUE;
+	END;
+
+	CREATE PROCEDURE CopyEntireMessage() BEGIN
+
+		DECLARE inRef REFERENCE TO InputRoot.JSON.Data.PayLoad.Shadow_Acct_List.Shadow_Acct_Item.Item[>];
+
+		CREATE LASTCHILD OF OutputRoot DOMAIN 'XMLNSC';
+		CREATE LASTCHILD OF OutputRoot.XMLNSC NAME 'PayLoad';
+		--CREATE LASTCHILD OF OutputRoot.XMLNSC.PayLoad NAME 'Shadow_Acct_List';
+		DECLARE outref REFERENCE TO OutputRoot.XMLNSC.PayLoad;
+
+		DECLARE I INTEGER 1;
+		WHILE LASTMOVE(inRef) DO
+			SET outref.Shadow_Acct_Lists[I].Prim_Shadow_Acct_No = inRef.Shadow_Acct.Prim_Shadow_Acct_No;
+			SET outref.Shadow_Acct_Lists[I].Card_Acct_No = inRef.Shadow_Acct.Card_Acct_No;
+			SET outref.Shadow_Acct_Lists[I].Profile_Code = inRef.Shadow_Acct.Profile_Code;
+			SET outref.Shadow_Acct_Lists[I].Profile_Desc = inRef.Shadow_Acct.Profile_Desc;
+
+			SET outref.Shadow_Acct_Lists[I].Shadow_Acct_Financial.CCY_Alpha = inRef.Shadow_Acct_Financial.CCY_Alpha;
+			SET outref.Shadow_Acct_Lists[I].Shadow_Acct_Financial.CCY_Desc = inRef.Shadow_Acct_Financial.CCY_Desc;
+			SET outref.Shadow_Acct_Lists[I].Shadow_Acct_Financial.Credit_Limit = inRef.Shadow_Acct_Financial.Credit_Limit;
+			SET outref.Shadow_Acct_Lists[I].Shadow_Acct_Financial.Credit_Limit_LCY = inRef.Shadow_Acct_Financial.Credit_Limit_LCY;
+			SET outref.Shadow_Acct_Lists[I].Shadow_Acct_Financial.Balance = inRef.Shadow_Acct_Financial.Balance;
+			SET outref.Shadow_Acct_Lists[I].Shadow_Acct_Financial.Balance_LCY = inRef.Shadow_Acct_Financial.Balance_LCY;
+			SET outref.Shadow_Acct_Lists[I].Shadow_Acct_Financial.Pending_Amt = inRef.Shadow_Acct_Financial.Pending_Amt;
+			SET outref.Shadow_Acct_Lists[I].Shadow_Acct_Financial.Pending_Amt_LCY = inRef.Shadow_Acct_Financial.Pending_Amt_LCY;
+			SET outref.Shadow_Acct_Lists[I].Shadow_Acct_Financial.Accrued_Interest = inRef.Shadow_Acct_Financial.Accrued_Interest;
+			SET outref.Shadow_Acct_Lists[I].Shadow_Acct_Financial.Accrued_Interest_LCY = inRef.Shadow_Acct_Financial.Accrued_Interest_LCY;
+			SET outref.Shadow_Acct_Lists[I].Shadow_Acct_Financial.Available_Amt = inRef.Shadow_Acct_Financial.Available_Amt;
+			SET outref.Shadow_Acct_Lists[I].Shadow_Acct_Financial.Available_Amt_LCY = inRef.Shadow_Acct_Financial.Available_Amt_LCY;
+
+			SET outref.Shadow_Acct_Lists[I].Shadow_Acct_Repayment.Repay_Acct_CCY_Alpha = inRef.Shadow_Acct_Repayment.Repay_Acct_CCY_Alpha;
+			SET outref.Shadow_Acct_Lists[I].Shadow_Acct_Repayment.Repay_Acct_CCY_Desc = inRef.Shadow_Acct_Repayment.Repay_Acct_CCY_Desc;
+			SET outref.Shadow_Acct_Lists[I].Shadow_Acct_Repayment.Repay_Acct_No = inRef.Shadow_Acct_Repayment.Repay_Acct_No;
+
+			SET outref.Shadow_Acct_Lists[I].Shadow_Acct_Status.Admin_Status_Code = inRef.Shadow_Acct_Status.Admin_Status_Code;
+			SET outref.Shadow_Acct_Lists[I].Shadow_Acct_Status.Admin_Status_Desc = inRef.Shadow_Acct_Status.Admin_Status_Desc;
+			SET outref.Shadow_Acct_Lists[I].Shadow_Acct_Status.Unpaid_Status_Code = inRef.Shadow_Acct_Status.Unpaid_Status_Code;
+			SET outref.Shadow_Acct_Lists[I].Shadow_Acct_Status.Unpaid_Status_Desc = inRef.Shadow_Acct_Status.Unpaid_Status_Desc;
+
+			DECLARE J INTEGER 1;
+			DECLARE inRef1 REFERENCE TO InputRoot.JSON.Data.PayLoad.Shadow_Acct_List.Shadow_Acct_Item.Item[I].Shadow_Acct_Cards.Card_Item.Item[>];
+			WHILE LASTMOVE(inRef1) DO
+
+				SET outref.Shadow_Acct_Lists[I].Shadow_Acct_Cards[J].Card_Holder_Data.Card_Holder_Type = inRef1.Card_Holder_Data.Card_Holder_Type;
+				SET outref.Shadow_Acct_Lists[I].Shadow_Acct_Cards[J].Card_Holder_Data.Card_Holder_CIR = inRef1.Card_Holder_Data.Card_Holder_CIR;
+				SET outref.Shadow_Acct_Lists[I].Shadow_Acct_Cards[J].Card_Holder_Data.Card_Masked_No = inRef1.Card_Holder_Data.Card_Masked_No;
+				SET outref.Shadow_Acct_Lists[I].Shadow_Acct_Cards[J].Card_Holder_Data.Card_Expiry_Date = inRef1.Card_Holder_Data.Card_Expiry_Date;
+				SET outref.Shadow_Acct_Lists[I].Shadow_Acct_Cards[J].Card_Holder_Data.Card_Embossed_Name = inRef1.Card_Holder_Data.Card_Embossed_Name;
+				SET outref.Shadow_Acct_Lists[I].Shadow_Acct_Cards[J].Card_Holder_Data.Stop_List_Marker = inRef1.Card_Holder_Data.Stop_List_Marker;
+
+				SET outref.Shadow_Acct_Lists[I].Shadow_Acct_Cards[J].Card_Status.Card_Status_Code = inRef1.Card_Status.Card_Status_Code;
+				SET outref.Shadow_Acct_Lists[I].Shadow_Acct_Cards[J].Card_Status.Card_Status_Desc = inRef1.Card_Status.Card_Status_Desc;
+
+				SET outref.Shadow_Acct_Lists[I].Shadow_Acct_Cards[J].Card_Product.Card_Network_Code = inRef1.Card_Product.Card_Network_Code;
+				SET outref.Shadow_Acct_Lists[I].Shadow_Acct_Cards[J].Card_Product.Card_Network_Desc = inRef1.Card_Product.Card_Network_Desc;
+				SET outref.Shadow_Acct_Lists[I].Shadow_Acct_Cards[J].Card_Product.Card_Prod_Code = inRef1.Card_Product.Card_Prod_Code;
+				SET outref.Shadow_Acct_Lists[I].Shadow_Acct_Cards[J].Card_Product.Card_Prod_Desc = inRef1.Card_Product.Card_Prod_Desc;			
+
+
+				SET J = J + 1;
+				MOVE inRef1 NEXTSIBLING REPEAT TYPE NAME;
+			END WHILE;
+
+			SET I = I + 1;
+			MOVE inRef NEXTSIBLING REPEAT TYPE NAME;
+		END WHILE;		
+		
+
+
+	END;
+END MODULE;
