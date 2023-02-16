@@ -1,0 +1,39 @@
+
+
+CREATE COMPUTE MODULE MF_4J_Compute
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		
+		 CALL CopyEntireMessage();
+		RETURN TRUE;
+	END;
+
+	CREATE PROCEDURE CopyEntireMessage() BEGIN
+		SET OutputRoot = InputRoot;
+		DECLARE inpRef BLOB ASBITSTREAM(InputRoot.XMLNSC ENCODING 564 CCSID 1208);
+		DECLARE req CHARACTER;
+		
+		SET req = CAST(inpRef AS CHARACTER CCSID 1208);
+		DECLARE b1 BOOLEAN;
+				
+		CALL initLog ('C:/Users/Sreenivas Bandaru/Downloads/Log4J_Config/Log4jConfigurationFile.xml') INTO b1;
+		IF (b1=FALSE)THEN
+			
+		END IF;
+		DECLARE b2 BOOLEAN;
+		DECLARE time_stamp  CHARACTER CURRENT_TIMESTAMP;
+		
+		CALL filelogj (ApplicationLabel,'dco_debug','DEBUG',req) INTO b2;
+		
+	END;
+	
+	CREATE FUNCTION filelogj( IN Application_Name CHARACTER,IN LOGGER_NAME CHARACTER,IN LEVEL CHARACTER,IN TEXT CHARACTER )
+	RETURNS BOOLEAN
+	LANGUAGE JAVA
+	EXTERNAL NAME "com.ibm.broker.IAM3.Log4jNode.log";
+
+	CREATE FUNCTION initLog( IN CONFIG_FILE_NAME CHARACTER )
+	RETURNS BOOLEAN
+	LANGUAGE JAVA
+	EXTERNAL NAME "com.ibm.broker.IAM3.Log4jNode.initLog4j";
+END MODULE;
